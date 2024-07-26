@@ -1,4 +1,4 @@
-package Exeptions;
+package com.fcpt.plufinder.Exeptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

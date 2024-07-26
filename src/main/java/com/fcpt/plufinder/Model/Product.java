@@ -1,4 +1,4 @@
-package Model;
+package com.fcpt.plufinder.Model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,7 +9,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table (name="products_indatabase")
-public class Products{
+public class Product{
 	//MAPPED CLASS VARIABLES
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -32,8 +32,8 @@ public class Products{
     private String description;
     
     //CLASS CONSTRUCTORS
-    public Products(){}
-    public Products(int id,String productName,String mainImageUrl,long priceInCents,String unit,int plu,
+    public Product(){}
+    public Product(int id,String productName,String mainImageUrl,long priceInCents,String unit,int plu,
 			String department,String category,String description){
 		this.id=id;
 		this.productName=productName;
