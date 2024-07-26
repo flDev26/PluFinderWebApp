@@ -1,4 +1,4 @@
-package model;
+package com.fcpt.plufinder.Model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,32 +8,32 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table (name="products_inDatabase")
-public class Products{
+@Table (name="products_indatabase")
+public class Product{
 	//MAPPED CLASS VARIABLES
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
-	@Column(name="name_inDB")
+	@Column(name="name_in_db")
 	private String productName;
-	@Column(name="mainImage_inDB")
+	@Column(name="mainImage_in_db")
     private String mainImageUrl;
-	@Column(name="price_inDB")
+	@Column(name="price_in_db")
     private long priceInCents;
-	@Column(name="unit_inDB")
+	@Column(name="unit_in_db")
     private String unit;
-	@Column(name="plu_inDB")
+	@Column(name="plu_in_db")
 	private int plu;
-	@Column(name="department_inDB")
+	@Column(name="department_in_db")
 	private String department;
-	@Column(name="category_inDB")
+	@Column(name="category_in_db")
     private String category;
-	@Column(name="description_inDB")
+	@Column(name="description_in_db")
     private String description;
     
     //CLASS CONSTRUCTORS
-    public Products(){}
-    public Products(int id,String productName,String mainImageUrl,long priceInCents,String unit,int plu,
+    public Product(){}
+    public Product(int id,String productName,String mainImageUrl,long priceInCents,String unit,int plu,
 			String department,String category,String description){
 		this.id=id;
 		this.productName=productName;
