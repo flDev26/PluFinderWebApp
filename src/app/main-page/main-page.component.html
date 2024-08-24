@@ -1,0 +1,16 @@
+<h3>Main Page</h3>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4" *ngFor="let product of filteredProducts">
+          <div class="card mb-4">
+            <img ngOptimizedImage [src]="product.imageUrl"class="card-img-top" 
+            alt="{{product.productName}}">
+            <div class="card-body">
+              <h5 class="card-title">{{product.productName}}</h5>
+              <p class="card-text">PLU: {{product.plu}}</p>
+              <p class="card-text">Department: {{product.department}}</p>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>

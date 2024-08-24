@@ -1,36 +1,40 @@
 <!--HEADER navigation bar.-->
 <nav class="navbar">
   <!--App name banner.-->
-  <h3 class="appTitle">{{appVar_title}}</h3>
+  <h2 class="appTitle">{{appVar_title}}</h2>
   <!--Container to hold all buttons.-->
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">
+    <!--Menu options are hyperlink activated to different components.-->
+    <a class="navbar-brand" routerLink="/meat-market-page" routerLinkActive="active">
       <img src="/assets/BannerImages/steak.png" alt="" width="50" height="50" class="d-inline-block align-text-center">
       MeatMarket
     </a>
-    <a class="navbar-brand" href="#">
+    <a class="navbar-brand" routerLink="/seafood-page" routerLinkActive="active">
       <img src="/assets/BannerImages/trout.png" alt="" width="50" height="50" class="d-inline-block align-text-center">
       Seafood
     </a>
-    <a class="navbar-brand" href="#">
+    <a class="navbar-brand" routerLink="/deli-page" routerLinkActive="active">
       <img src="/assets/BannerImages/sandwitch.png" alt="" width="50" height="50" class="d-inline-block align-text-center">
       Deli
     </a>
-    <a class="navbar-brand" href="#">
+    <a class="navbar-brand" routerLink="/bakery-page" routerLinkActive="active">
       <img src="/assets/BannerImages/cupcake.png" alt="" width="50" height="50" class="d-inline-block align-text-center">
       Bakery
     </a>
-    <a class="navbar-brand" href="#">
+    <a class="navbar-brand" routerLink="/produce-page" routerLinkActive="active">
       <img src="/assets/BannerImages/cornucopia.png" alt="" width="50" height="50" class="d-inline-block align-text-center">
       Produce
     </a>
+    <form class="d-flex" (submit)="onSearch()">
+      <input class="form-control me-2" id="searchInput" name="searchResult" type="search" placeholder="Search" aria-label="Search"
+      [(ngModel)]="searchTerm" (input)="onSearchInput($event)">
+      <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
   </div>
 </nav>
 
-<!--Dynamic container. Loads in diffrent page content.-->
-<div class="container">
-  <router-outlet></router-outlet>
-</div>
+<!--Dynamic container. Loads in different page content.-->
+<router-outlet></router-outlet>
 
 <!--FOOTER banner.-->
 <footer class="global-footer">

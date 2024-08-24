@@ -1,1 +1,14 @@
-<p>meat-market works!</p>
+<div class="container">
+  <h3>Meat Market PLUs</h3>
+  <tr *ngFor="let product of products">
+    <p>{{product.id}}</p>
+    <p>{{product.productName}}</p>
+    <p>{{product.plu}}</p>
+    <p>{{product.department}}</p>
+    <p>{{product.imageFileName}}</p>
+    <p>{{product.priceInCents}}</p>
+    <p>{{product.unit}}</p>
+    <p>{{product.category}}</p>
+    <p>{{product.description}}</p>
+  </tr>
+</div>
