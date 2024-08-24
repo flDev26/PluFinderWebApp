@@ -1,5 +1,7 @@
 package com.fcpt.plufinder.Model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,8 +18,9 @@ public class Product{
 	private int id;
 	@Column(name="name_in_db")
 	private String productName;
-	@Column(name="mainImage_in_db")
-    private String mainImageUrl;
+	@Column(name="main_image_in_db")
+	@JsonProperty("imageFileName")
+    private String imageFileName;
 	@Column(name="price_in_db")
     private long priceInCents;
 	@Column(name="unit_in_db")
@@ -33,11 +36,11 @@ public class Product{
     
     //CLASS CONSTRUCTORS
     public Product(){}
-    public Product(int id,String productName,String mainImageUrl,long priceInCents,String unit,int plu,
+    public Product(int id,String productName,String imageFileName,long priceInCents,String unit,int plu,
 			String department,String category,String description){
 		this.id=id;
 		this.productName=productName;
-		this.mainImageUrl=mainImageUrl;
+		this.imageFileName=imageFileName;
 		this.priceInCents=priceInCents;
 		this.unit=unit;
 		this.plu=plu;
@@ -60,10 +63,10 @@ public class Product{
 		this.productName=productName;
 	}
 	public String getImageUrl(){
-		return mainImageUrl;
+		return imageFileName;
 	}
-	public void setImageUrl(String mainImageUrl){
-		this.mainImageUrl=mainImageUrl;
+	public void setImageUrl(String imageFileName){
+		this.imageFileName=imageFileName;
 	}
 	public long getPriceInCents(){
 		return priceInCents;
