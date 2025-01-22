@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ImageServiceLogic {
     //Variable holding folder path to main image of every product.
-    private final Path mainImagePath=Paths.get("src/main/resources/MainPictures");
+    private final Path mainImagePath=Paths.get("./src/main/resources/MainPictures");
 
     public Resource loadaMainImage(String givenImageName){
         try {

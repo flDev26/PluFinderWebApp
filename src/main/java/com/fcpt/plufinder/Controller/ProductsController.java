@@ -1,5 +1,6 @@
 package com.fcpt.plufinder.Controller;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fcpt.plufinder.BusinessLogic.CustomRepoLogic;
 import com.fcpt.plufinder.BusinessLogic.ImageServiceLogic;
-import com.fcpt.plufinder.BusinessLogic.ProductRepoLogic;
+import com.fcpt.plufinder.BusinessLogic.AutoRepoLogic;
 import com.fcpt.plufinder.Exeptions.ResourceNotFound;
 import com.fcpt.plufinder.Model.Product;
 
@@ -33,7 +36,9 @@ import com.fcpt.plufinder.Model.Product;
 @RequestMapping("/api/v1/")
 public class ProductsController{
     @Autowired
-    private ProductRepoLogic jpaFuncVar;
+    private AutoRepoLogic jpaAutoQuery;
+    @Autowired
+    private CustomRepoLogic customQuery;
     @Autowired
     private ImageServiceLogic imgServVar;
 
@@ -41,28 +46,95 @@ public class ProductsController{
     @GetMapping("/products_indatabase")
     public List<Product> getAllProductsFromDb(){
         // Function "findAll()" is part of the JpaRepository interface.   	
-        return jpaFuncVar.findAll();
+        return jpaAutoQuery.findAll();
     }
 
     //POST request: Create a new table entry.
     @PostMapping("/products_indatabase")
     public Product createNewProductInDb(@RequestBody Product productClassVar){
-    	return jpaFuncVar.save(productClassVar);
+    	return jpaAutoQuery.save(productClassVar);
     }
 
-    //GET request: Grab one table entry based on "productName".   
-    @GetMapping("/products_indatabase/{productName}")
-    public ResponseEntity<Product> getOneProductFromDb(@PathVariable String productName){
-    	// In case of invalid "productName", an exception handler prints an error message. 
-    	Product productClassVar=jpaFuncVar.findByProductName(productName).orElseThrow(()->
-    	new ResourceNotFound("Product does not exist with name: "+productName)); 
-    	
-    	return ResponseEntity.ok(productClassVar);
+    //GET request: Grab table entries that contain "productName" string.   
+    @GetMapping("/products_indatabase/search")
+    public ResponseEntity<List<Product>> getProductsWithNameFromDb(@RequestParam("productName") String productName){
+    	List<Product> productClassVar=jpaAutoQuery.findByProductNameContaining(productName);
+        System.out.println("Found products: " + productClassVar);
+        //In case of invalid "productName", an exception handler prints an error message. 
+        if(productClassVar.isEmpty()){
+            throw new ResourceNotFound("No products found with name: " + productName);
+        }
+        return ResponseEntity.ok(productClassVar);
     }
+
+    //GET request: Grabs table entries based on given string parameters.
+    @GetMapping("/products_indatabase/filteredSearch")
+    public ResponseEntity<List<Product>> getFilteredProductsFromDb(
+        @RequestParam("query") String query,
+        @RequestParam(value="department",required=false) String department) {
+        
+        //Split the query into substrings
+        String[]substrings=query.split(" ");
+
+        //Debugging: Print the substrings and department.
+        System.out.println("Substrings: "+Arrays.toString(substrings));
+        System.out.println("Department: "+department);
+        
+        //Search for products containing any of the substrings in productName or category, and matching the department.
+        List<Product>productClassVar=customQuery.queryByNameCategoryDepartment(substrings,department);
+        
+        System.out.println("Found products: "+productClassVar);
+        if(productClassVar.isEmpty()){
+            return ResponseEntity.ok(productClassVar); //Return an empty array.
+        }
+        return ResponseEntity.ok(productClassVar);
+    }
+
+    @GetMapping("/products_indatabase/filteredSearchByMarketFirstCategory")
+    public ResponseEntity<List<Product>> getFilteredProductsByMarketCategory(
+        @RequestParam("query") String query){
+        
+        //Split the query into substrings.
+        String[]categorySubstrings=query.split(" ");
+        
+        //Debugging: Print the category substrings.
+        System.out.println("(in Get)Category Substrings: "+Arrays.toString(categorySubstrings));
+        
+        //Search for products matching the first comma-delimited substring in category and belonging to the 'Market' department.
+        List<Product>productClassVar=customQuery.queryByMarketFirstCategory(categorySubstrings);
+        
+        if(productClassVar.isEmpty()){
+            System.out.println("(in Get)Empty array.");
+            return ResponseEntity.ok(productClassVar); //Return an empty array
+        }
+        return ResponseEntity.ok(productClassVar);
+    }
+
+    @GetMapping("/products_indatabase/filteredSearchByMarketSecondCategory")
+    public ResponseEntity<List<Product>> getFilteredProductsByMarketSecondCategory(
+        @RequestParam("query") String query) {
+        
+        //Split the query into substrings.
+        String[]categorySubstrings=query.split(" ");
+        System.out.println("Category Substrings: "+Arrays.toString(categorySubstrings));
+        
+        //Execute custom query.
+        List<Product>productClassVar=customQuery.queryByMarketSecondCategory(categorySubstrings);
+        
+        System.out.println("Found products: "+productClassVar);
+        if(productClassVar.isEmpty()){
+            return ResponseEntity.ok(productClassVar); //Return an empty array
+        }
+    return ResponseEntity.ok(productClassVar);
+}
+
+
+
+
 
     //GET request: Grab one image.
     @GetMapping("/images/{fileName}")
-    public ResponseEntity<Resource>getOneMainImage(@PathVariable("fileName") String fileName){
+    public ResponseEntity<Resource> getOneMainImage(@PathVariable("fileName") String fileName){
         //Full image path.
         Resource storagePath=imgServVar.loadaMainImage(fileName);
         //Instruct the image to reveal itself on screen.
