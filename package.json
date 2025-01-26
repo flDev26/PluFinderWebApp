@@ -23,6 +23,8 @@
     "@angular/ssr": "^17.1.0",
     "bootstrap": "^5.3.3",
     "express": "^4.18.2",
+    "image-map-resizer": "^1.0.10",
+    "panzoom": "^9.4.3",
     "plufinder-frontend": "file:",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

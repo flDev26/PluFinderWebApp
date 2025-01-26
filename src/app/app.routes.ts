@@ -6,10 +6,10 @@ import { SeafoodComponent } from './seafood/seafood.component';
 import { DeliComponent } from './deli/deli.component';
 import { BakeryComponent } from './bakery/bakery.component';
 
-export const routes: Routes = [
+export const routes:Routes=[
     {path:"mainPage",component:MainPageComponent},
     {path:"",redirectTo:"mainPage",pathMatch:"full"},
-    {path:'meat-market-page',component:MeatMarketComponent},
+    {path:"meat-market-page",component:MeatMarketComponent},
     {path:"produce-page",component:ProduceComponent},
     {path:"seafood-page",component:SeafoodComponent},
     {path:"deli-page",component:DeliComponent},

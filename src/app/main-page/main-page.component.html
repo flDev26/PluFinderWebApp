@@ -1,16 +1,81 @@
 <h3>Main Page</h3>
+<!--Card container structure.-->
 <div class="container">
-    <div class="row">
-        <div class="col-md-4" *ngFor="let product of filteredProducts">
-          <div class="card mb-4">
-            <img ngOptimizedImage [src]="product.imageUrl"class="card-img-top" 
-            alt="{{product.productName}}">
-            <div class="card-body">
-              <h5 class="card-title">{{product.productName}}</h5>
-              <p class="card-text">PLU: {{product.plu}}</p>
-              <p class="card-text">Department: {{product.department}}</p>
-            </div>
-          </div>
-        </div>
+  <div class="col-md-4" *ngFor="let product of products">
+    <div class="card mb-4" (click)="openModal(product)">
+      <img ngOptimizedImage [src]="product.imageUrl" class="card-img-top" alt="{{product.productName}}">
+      <div class="card-body">
+        <h5 class="card-title">{{product.productName}}</h5>
+        <p class="card-text">PLU: {{product.plu}}</p>
+      </div>
     </div>
+  </div>
 </div>
+<!--Main page paragraphs.-->
+<div class="info-section">
+  <h4>About This App</h4>
+  <p>The "PLU Finder" is a static web app that primarily helps users associate product names to 
+     corresponding PLUs(Product Lookup Codes). Furthermore, this web app seeks to help new employees
+     or cross functioning employees by providing them with tips and information relevant to their 
+     working area. This app only tracks products sold by weight or by quantity, so products that possess
+     a UPC(Universal Product Code) are omitted.</p>
+  <p>Currently, the purpose of this web app is to provide a secondary method of PLU visualization.
+     For some departments, a visual aid of products in question can better assist employees with 
+     PLU familiarization.</p>
+  <p>A quick reference tool. Simple, but effective.</p>
+
+  <h4>Use Cases</h4>
+  <ul>
+    <li>
+      <h5>Cashier:</h5>
+      <p>Useful in helping identify produce PLUs while at a checkout register.</p>
+    </li>
+    <li>  
+      <h5>Meat Market/Deli:</h5>
+      <p>Applicable when printing price tags for meat products.</p>
+    </li>
+    <li>
+      <h5>Deli/Curbside:</h5>
+      <p>Serves as a way to recommend or select a substitution for products no currently in stock.</p>
+    </li>
+    <li>
+      <h5>Bakery</h5>
+      <p>Provides baking times and temperatures for bread and pastries.</p>
+    </li>
+  </ul>
+
+  <h4>Disclaimer</h4>
+  <p>The developer has created this tool with the intent to demonstrate his abilities to build and
+     deploy a web application. "PLU Finder" is designed to perform in a real-world situation for 
+     educational purposes only. Presently, this app is tailor made to suit the needs of one specific
+     store location.</p>
+  <p>This tool is not endorsed by any business. While grocery store employees are encouraged to use 
+     this tool and provide feedback, this app is not an official tool and should not replace any 
+     official systems or processes. Employees are to use this tool as supplement alongside their 
+     already existing official systems or processes.</p>
+  <p>All logos and trademarks belong to their respective owners and are not seen in the context of 
+     this app. This is the case for any images, videos, or text within this app.</p>   
+
+  <h4>Feedback</h4>
+  <p>What did you think of this web app? Are there any new features you think are missing? Your
+     feedback is valuable to the developer! Thank you.</p>
+</div>
+
+<!--Modal structure for a card(pop-up sub-window).-->
+<div id="someModalId" class="modal">
+  <div class="modal-content">
+    <span class="close">×</span>
+    <img [src]="selectedProduct?.imageUrl" class="modal-img">
+    <div class="modal-text">
+      <h2>{{selectedProduct?.productName}}</h2>
+      <div class="scrollableContent">
+        <p>PLU: {{selectedProduct?.plu}}</p>
+        <p>Department: {{selectedProduct?.department}}</p>
+        <p>Price: ${{selectedProduct?convertCentsToDollars(selectedProduct.priceInCents):"N/A"}}{{selectedProduct?.unit}}</p>
+        <p>Category: {{selectedProduct?.category}}</p>
+        <p>Description: {{selectedProduct?.description}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+

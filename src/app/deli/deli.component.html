@@ -1,1 +1,37 @@
-<p>deli works!</p>
+<h3>Deli</h3>
+<!--Card container structure-->
+<div class="container">
+  <div class="col-md-4" *ngFor="let product of products">
+    <div class="card mb-4" (click)="openModal(product)">
+      <img ngOptimizedImage [src]="product.imageUrl" class="card-img-top" alt="{{product.productName}}">
+      <div class="card-body">
+        <h5 class="card-title">{{product.productName}}</h5>
+        <p class="card-text">PLU: {{product.plu}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Accordion structure-->
+<div *ngFor="let cordionItem of cordionItems; let i=index">
+  <button class="accordion" (click)="togglePanel(i)">{{cordionItem.title}}</button>
+  <div class="panel" [ngStyle]="{ 'display': cordionItem.isOpen ? 'block' : 'none' }">
+    <p>{{cordionItem.content}}</p>
+  </div>
+</div>
+
+
+<!--Modal structure for a card(pop-up sub-window)-->
+<div id="someModalId" class="modal">
+  <div class="modal-content">
+    <span class="close">×</span>
+    <img [src]="selectedProduct?.imageUrl" class="modal-img">
+    <div class="modal-text">
+      <h2>{{selectedProduct?.productName}}</h2>
+      <p>PLU: {{selectedProduct?.plu}}</p>
+      <p>Department: {{selectedProduct?.department}}</p>
+      <p>Price: ${{selectedProduct?convertCentsToDollars(selectedProduct.priceInCents):"N/A"}}{{selectedProduct?.unit}}</p>
+      <p>Category: {{selectedProduct?.category}}</p>
+      <p>Description: {{selectedProduct?.description}}</p>
+    </div>
+  </div>
+</div>

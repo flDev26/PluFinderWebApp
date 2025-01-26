@@ -1,8 +1,11 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { AppInjectibleService } from '../app-injectible.service';
 import { Product } from '../product';
+import { AppComponent } from '../app.component';
+import { Subscription } from 'rxjs';
+
 
 
 @Component({
@@ -13,61 +16,89 @@ import { Product } from '../product';
             NgOptimizedImage],
   providers: [AppInjectibleService],  //Important. Else circular dependency complaint occurs.      
   templateUrl: './main-page.component.html',
-  styleUrl: './main-page.component.css'
+  styleUrl: './main-page.component.css',
 })
-export class MainPageComponent implements OnInit{
-
-  //Variable refering to injectible service definitions.
-  constructor(private injectibleService:AppInjectibleService){}
+export class MainPageComponent implements OnInit,OnDestroy{
+  //Refrence variables for non-local services.
+  constructor(private injectibleService:AppInjectibleService,
+              private appCom:AppComponent){}
   
-  //Variables storing collected "Product" class instances.
-  products: Product[]=[];
-  filteredProducts:Product[]=[];
+  //Local variables.
+  products:Product[]=[];
+  selectedProduct:Product|null=null; //Helps open modals. !!FIX THE DATA TYPING HERE FOR MODALS!! 
+  dept:string="";
+  private subscriptions:Subscription=new Subscription(); //Helps manage subscriptions.
 
-  ngOnInit(): void {
+  ngOnInit():void{
+    //Quickly capture px value of window's width
+    //this.setVwAsPx();
 
-     // Ensure products are loaded if not already
-    if (this.injectibleService.products.length == 0) {
-      this.injectibleService.loadProducts();
-      console.log("MAIN-Loaded.")
+    //Reset the "products$" observable when the component is initialized
+    console.log('MAIN-Reset1B:',this.appCom.products$);
+    this.appCom.resetProducts();
+    console.log('MAIN-Reset1A:',this.appCom.products$);
+
+    //Subscribe to "products$".
+    this.subscriptions.add(
+      this.appCom.products$.subscribe((data:Product[])=>{
+        this.products=data;
+        if(this.products.length===0){
+          console.log('MAIN-Products array is empty.');
+        }else{console.log('MAIN-Products loaded(obs):',this.appCom.products$);}
+        
+        this.getProductImage();
+      })
+    );
+
+    //Get modal element.
+    var modalId=document.getElementById("someModalId");
+
+    //Get close button within modal.
+    var modalButton=document.getElementsByClassName("close")[0];
+
+    //Close modal on close button click.
+    if(modalButton){
+      modalButton.addEventListener('click',()=>{
+        if(modalId){
+          modalId.style.display="none";
+        }
+      });
     }
 
-    this.injectibleService.dataReady$.subscribe(
-      (isReady: boolean) => {
-        if (isReady==true) {
-          this.products = this.injectibleService.products;
-          console.log("MAIN-Products fetched:",this.products);
-          this.getProductImage();
-        }
-        else if(isReady==false){console.log("MAIN-Not ready.");}
-        else{console.log("MAIN-Error with bool observable.");};
-      },
-      error => {
-        console.error('MAIN-Error checking data readiness:', error);
+    //Close modal on outside click.
+    window.addEventListener('click',(event)=>{
+      if(event.target==modalId){
+        if(modalId){modalId.style.display="none";}
       }
-    );
-
-    this.injectibleService.obsrSearchResults$.subscribe(
-      (results: Product[]) => {
-        this.filteredProducts = results;
-        console.log("MAIN-Filtered products fetched:",this.filteredProducts);
-        console.log("MAIN-ObsrInput:",this.injectibleService.obsrGivenInput$);
-        console.log("MAIN-ObsrResults:",this.injectibleService.obsrSearchResults$);
-      }
-    );
+    });
   }
-  
 
+  ngOnDestroy():void{
+     this.subscriptions.unsubscribe(); //Unsubscribe from all subscriptions to avoid memory leaks.
+     console.log('MAIN-Reset2B:',this.appCom.products$);
+     this.appCom.resetProducts();
+     console.log('MAIN-Reset2A:',this.appCom.products$);
+  }
+
+  //Method to open one modal element.
+  openModal(product:Product){
+    this.selectedProduct=product;
+    const modal=document.getElementById("someModalId");
+    if(modal){
+      modal.style.display="block";
+    }
+  }
+   
+  //Method to grab all database entries.Not ideal. NOT USED CURRENTLY. 
   private getAllProducts(){
-    /*this.injectibleService.GetAllProductsFromDb().subscribe(data=>{
-      this.products=data; //Collect all database entries first.
-      console.log('Products fetched:', this.products);*/
-      //grab products fom products[] 
+    this.injectibleService.GetAllProductsFromDb().subscribe(data=>{
+      this.products=[...data]; //Collect all database entries first.
+      console.log('Products fetched:', this.products);
       this.getProductImage(); //Then, grab image names from collected entries.
-    //});
-    
+    });
   }
 
+  //Method to grab image corresponding to given product name.
   private getProductImage(){
     if(this.products.length==0){console.error("Zero products were retrieved.")}
     else{
@@ -81,4 +112,20 @@ export class MainPageComponent implements OnInit{
       });
     }
   }
+
+  //Method to help express price.
+  convertCentsToDollars(cents:number):string{return (cents/100).toFixed(2);}
+
+  // JavaScript to set the pixel value of 98vw as a CSS variable function 
+  setVwAsPx(){ 
+    const vw=window.innerWidth;
+    const varVwPx=vw*0.98; // Calculate 98vw in pixels
+    const containerElement=document.querySelector('.container') as HTMLElement;
+
+    if(containerElement){containerElement.style.setProperty('--var_vw', `${varVwPx}px`);}
+    console.log("Captured vw in pixels:",varVwPx);
+  }
+
+  /*@HostListener('window:resize',['$event'])
+   onResize(event:any):void{this.setVwAsPx();}*/
 }
