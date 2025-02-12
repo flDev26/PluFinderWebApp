@@ -25,7 +25,9 @@ dependencies {
     runtimeOnly("com.mysql:mysql-connector-j")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.10.3")
-   // implementation("org.springframework.cloud:spring-cloud-starter-aws")
+    //Aws Dependencies
+    implementation("io.awspring.cloud:spring-cloud-aws-starter:3.0.0")
+    implementation("software.amazon.awssdk:aws-core:2.30.6")
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {

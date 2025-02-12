@@ -31,7 +31,7 @@ public class CustomRepoLogic implements CustomMethods{
                         .append(" THEN 1 ELSE 0 END)");
         }
 
-        //Conditional loop. Previously rated substrings with a 1 are matched to "p's" table entries.
+        //Conditional loop. Previously rated entries with 1's are matched to "substrings" elements.
         //Table entries that have the most substrings with 1's are among the first search results.
         queryBuilder.append(" AS relevance FROM Product p WHERE (");
         for(int i=0;i<substrings.length;i++){
@@ -73,17 +73,31 @@ public class CustomRepoLogic implements CustomMethods{
     }
     
     @Override
-    public List<Product> queryByMarketFirstCategory(String[] categorySubstrings){
+    public List<Product> queryByFirstCategory(String[] categorySubstrings,String department){
         //Construct native query.
-        StringBuilder queryBuilder=new StringBuilder("SELECT * FROM products_indatabase p WHERE(");
+        StringBuilder queryBuilder=new StringBuilder("SELECT p.*, ");
         
-        //Add category conditions to match any of the first comma-delimited substrings.
+        //Score each parameter substring(s) against the first delimmited "category_in_db" for every databse entry.
         for(int i=0;i<categorySubstrings.length;i++){
-            if(i>0){queryBuilder.append(" OR ");}
+            if(i>0){queryBuilder.append(" + ");}
+            queryBuilder.append("(CASE WHEN LOWER(SUBSTRING_INDEX(p.category_in_db, ',', 1)) LIKE :categorySubstring").append(i)
+            .append(" THEN 1 ELSE 0 END)");
+        }
+        queryBuilder.append(" AS relevance FROM products_indatabase p WHERE (");
+
+        //Match entries with relevance score unequal to "0" against the parameter substring array.
+        for (int i=0;i<categorySubstrings.length;i++){
+        if (i>0){queryBuilder.append(" OR ");}
             queryBuilder.append("LOWER(SUBSTRING_INDEX(p.category_in_db, ',', 1)) LIKE :categorySubstring").append(i);
         }
-        queryBuilder.append(") AND LOWER(p.department_in_db) = 'Market'");
-    
+        queryBuilder.append(")");
+
+        //Department parameter. Restricts search to only entries belonging to specific department. 
+        if(department!=null&&!department.trim().isEmpty()){
+            queryBuilder.append(" AND LOWER(p.department_in_db) LIKE :department");
+        }
+        queryBuilder.append(" ORDER BY relevance DESC"); //Sort results by relevance score.
+     
         //Debug statement.
         System.out.println("(in Mthd)Constructed Query: "+queryBuilder.toString());
     
@@ -96,8 +110,13 @@ public class CustomRepoLogic implements CustomMethods{
             natvQuery.setParameter("categorySubstring"+i,"%"+categorySubstrings[i].trim().toLowerCase()+"%");
             System.out.println("(in Mthd)Parameter categorySubstring"+i+": "+categorySubstrings[i].trim().toLowerCase());
         }
+         //Debug statement. The optional inital department string is searched within "query".
+         if (department!=null&&!department.trim().isEmpty()){
+            natvQuery.setParameter("department","%"+department.trim().toLowerCase()+"%");
+            System.out.println("(in Mthd)Parameter department: "+department.trim().toLowerCase());
+        }
     
-        //Execute native query and cast results to Product. 
+        //Execute native query and cast results to the "Product" data type. 
         @SuppressWarnings("unchecked") 
         List<Product>results=natvQuery.getResultList(); 
         return results;
@@ -108,7 +127,8 @@ public class CustomRepoLogic implements CustomMethods{
         //Construct native SQL query.
         StringBuilder queryBuilder=new StringBuilder("SELECT * FROM products_indatabase p WHERE (");
         
-        //Add category conditions to isolate the second comma-delimited element.
+        //The second comma-delimited "category_in_db" element foe every entry is isolated and compared
+        //against the "categorySubstrings" array.
         for(int i=0;i<categorySubstrings.length;i++){
             if(i>0){queryBuilder.append(" OR ");}
             queryBuilder.append("LOWER(SUBSTRING_INDEX(SUBSTRING_INDEX(p.category_in_db, ',', 2), ',', -1)) LIKE :categorySubstring").append(i);
@@ -116,7 +136,7 @@ public class CustomRepoLogic implements CustomMethods{
         queryBuilder.append(") AND LOWER(p.department_in_db) = 'Market'");
 
         //Debug statement.
-        System.out.println("Constructed Query: "+queryBuilder.toString());
+        System.out.println("(in Mthd)Constructed Query: "+queryBuilder.toString());
 
         //Make the native query official.
         Query query=entityManager.createNativeQuery(queryBuilder.toString(), Product.class);
@@ -124,7 +144,7 @@ public class CustomRepoLogic implements CustomMethods{
         //Isolation and preparation of substrings happens before printing of debug statement.
         for(int i=0;i<categorySubstrings.length;i++){
             query.setParameter("categorySubstring"+i,"%"+categorySubstrings[i].trim().toLowerCase()+"%");
-            System.out.println("Parameter categorySubstring"+i+": "+categorySubstrings[i].trim().toLowerCase());
+            System.out.println("(in Mthd)Parameter categorySubstring"+i+": "+categorySubstrings[i].trim().toLowerCase());
         }
 
         //Execute query and cast results to "Product" data type.

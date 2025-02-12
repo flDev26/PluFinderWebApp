@@ -31,7 +31,7 @@ public class Product{
 	private String department;
 	@Column(name="category_in_db")
     private String category;
-	@Column(name="description_in_db")
+	@Column(name="description_in_db",length=2000)
     private String description;
     
     //CLASS CONSTRUCTORS

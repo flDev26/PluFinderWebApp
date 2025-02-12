@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fcpt.plufinder.BusinessLogic.CustomRepoLogic;
-import com.fcpt.plufinder.BusinessLogic.ImageServiceLogic;
+import com.fcpt.plufinder.BusinessLogic.CustomResourceLogic;
 import com.fcpt.plufinder.BusinessLogic.AutoRepoLogic;
 import com.fcpt.plufinder.Exeptions.ResourceNotFound;
 import com.fcpt.plufinder.Model.Product;
@@ -27,7 +27,11 @@ import com.fcpt.plufinder.Model.Product;
 // at "http://localhost:8080", the CORS web browser policy would complain if the
 // front-end made a request to a domain different to the one it stands on. The annotation
 // here fixes this discrepancy.
+//****TESTING LOCALLY****
 @CrossOrigin(origins = "http://localhost:4200")
+
+//****AWS INSTANCE****
+//@CrossOrigin(origins = "http://plufinder-s3.s3-website.us-east-2.amazonaws.com")
 
 // RESTful API controller properties are defined here. CRUD(Create,Read,Update,Delete)
 // operations are the 4 motions used to handle a database. These 4 operations are
@@ -40,7 +44,9 @@ public class ProductsController{
     @Autowired
     private CustomRepoLogic customQuery;
     @Autowired
-    private ImageServiceLogic imgServVar;
+    private CustomResourceLogic imgServVar;
+    @Autowired
+    private CustomResourceLogic videoServVar;
 
     //GET request: Grab all table entries.
     @GetMapping("/products_indatabase")
@@ -71,7 +77,7 @@ public class ProductsController{
     @GetMapping("/products_indatabase/filteredSearch")
     public ResponseEntity<List<Product>> getFilteredProductsFromDb(
         @RequestParam("query") String query,
-        @RequestParam(value="department",required=false) String department) {
+        @RequestParam(value="department",required=false) String department){
         
         //Split the query into substrings
         String[]substrings=query.split(" ");
@@ -90,18 +96,20 @@ public class ProductsController{
         return ResponseEntity.ok(productClassVar);
     }
 
-    @GetMapping("/products_indatabase/filteredSearchByMarketFirstCategory")
-    public ResponseEntity<List<Product>> getFilteredProductsByMarketCategory(
-        @RequestParam("query") String query){
+    @GetMapping("/products_indatabase/filteredSearchByFirstCategory")
+    public ResponseEntity<List<Product>> getFilteredProductsByFirstCategory(
+        @RequestParam("query") String query,
+        @RequestParam(value="department",required=false) String department){
         
         //Split the query into substrings.
         String[]categorySubstrings=query.split(" ");
         
         //Debugging: Print the category substrings.
         System.out.println("(in Get)Category Substrings: "+Arrays.toString(categorySubstrings));
+        System.out.println("Department: "+department);
         
-        //Search for products matching the first comma-delimited substring in category and belonging to the 'Market' department.
-        List<Product>productClassVar=customQuery.queryByMarketFirstCategory(categorySubstrings);
+        //Search for products matching the first comma-delimited substring in category and belonging given "department".
+        List<Product>productClassVar=customQuery.queryByFirstCategory(categorySubstrings,department);
         
         if(productClassVar.isEmpty()){
             System.out.println("(in Get)Empty array.");
@@ -112,7 +120,7 @@ public class ProductsController{
 
     @GetMapping("/products_indatabase/filteredSearchByMarketSecondCategory")
     public ResponseEntity<List<Product>> getFilteredProductsByMarketSecondCategory(
-        @RequestParam("query") String query) {
+        @RequestParam("query") String query){
         
         //Split the query into substrings.
         String[]categorySubstrings=query.split(" ");
@@ -125,12 +133,8 @@ public class ProductsController{
         if(productClassVar.isEmpty()){
             return ResponseEntity.ok(productClassVar); //Return an empty array
         }
-    return ResponseEntity.ok(productClassVar);
-}
-
-
-
-
+        return ResponseEntity.ok(productClassVar);
+    }
 
     //GET request: Grab one image.
     @GetMapping("/images/{fileName}")
@@ -141,4 +145,16 @@ public class ProductsController{
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE,"image/jpeg").body(storagePath);
     }
     
+    //GET request: Grab one video.
+    @GetMapping("/videos/{fileName}")
+    public ResponseEntity<Resource> getOneVideo(@PathVariable("fileName") String fileName) {
+        //Load the video file from the service.
+        Resource storagePath= videoServVar.loadaVideo(fileName);
+
+        //Return the video with appropriate headers.
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, "video/mp4")
+                .body(storagePath);
+    }
+
 }
