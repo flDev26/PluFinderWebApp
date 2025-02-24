@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
-import { AppInjectibleService } from './app-injectible.service';
+import { AppInjectibleService } from './service/app-injectible.service';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Product } from './product';
@@ -30,7 +30,7 @@ export class AppComponent implements OnInit{
   //Search bar form variable.
   searchForm=this.fb.nonNullable.group({searchTerm:""});
 
-  //Change sensitive observable variables. Available to all components.
+  //Observable variables. Available to all components.
   private productsSubject=new BehaviorSubject<Product[]>([]);
   private deptSubject=new BehaviorSubject<string>("");
   products$=this.productsSubject.asObservable();
@@ -100,7 +100,7 @@ export class AppComponent implements OnInit{
   //Method used by any other component to change the "obsrDept$" value.
   setDept(givenString:string):void{this.deptSubject.next(givenString)}
 
-  //Method used by any other compoenent to change the "products$" value.
+  //Method used by any other component to change the "products$" value.
   setProd(givenArray:Product[]):void{this.productsSubject.next(givenArray);}
 
   //Method to reset "products$". Works, but does not fulfil intended purpose. NOTE:Gain better

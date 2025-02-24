@@ -1,10 +1,13 @@
-import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { AppInjectibleService } from '../app-injectible.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AppInjectibleService } from '../service/app-injectible.service';
 import { Product } from '../product';
 import { AppComponent } from '../app.component';
 import { Subscription } from 'rxjs';
+import { MarkdownModule } from 'ngx-markdown';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { CustomMDService } from '../service/markdown.service';
 
 
 
@@ -13,26 +16,35 @@ import { Subscription } from 'rxjs';
   standalone: true,  //For small scale projects. "app.module.ts" is not used.
   imports: [CommonModule,
             HttpClientModule,
-            NgOptimizedImage],
+            MarkdownModule],
   providers: [AppInjectibleService],  //Important. Else circular dependency complaint occurs.      
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.css',
 })
 export class MainPageComponent implements OnInit,OnDestroy{
-  //Refrence variables for non-local services.
+  //***Refrence variables for non-local variables.***
   constructor(private injectibleService:AppInjectibleService,
-              private appCom:AppComponent){}
+              private appCom:AppComponent,
+              private sanitizer: DomSanitizer,
+              private markdownService: CustomMDService){}
   
-  //Local variables.
-  products:Product[]=[];
+  //***Local variables.***
+   private subscriptions:Subscription=new Subscription(); //Helps manage subscriptions
+
+  //Variables to manipulate incoming "Product" arrays.
+  products:Product[]=[]; //Captures changes from "products$"
   selectedProduct:Product|null=null; //Helps open modals. !!FIX THE DATA TYPING HERE FOR MODALS!! 
-  dept:string="";
-  private subscriptions:Subscription=new Subscription(); //Helps manage subscriptions.
+  private dept:string="";
+  parsedDescription:SafeHtml=""; //Stores resulting transfomred html. 
 
-  ngOnInit():void{
-    //Quickly capture px value of window's width
-    //this.setVwAsPx();
+  //***Accordion content definition.***
+  cordionItems=[
+    {title:'App Info and Disclaimer',content:'',isOpen:false}
+  ];
 
+  
+  ngOnInit(): void{
+    //***"Product" tiles***.
     //Reset the "products$" observable when the component is initialized
     console.log('MAIN-Reset1B:',this.appCom.products$);
     this.appCom.resetProducts();
@@ -50,6 +62,7 @@ export class MainPageComponent implements OnInit,OnDestroy{
       })
     );
 
+    //***Modals***. 
     //Get modal element.
     var modalId=document.getElementById("someModalId");
 
@@ -73,6 +86,7 @@ export class MainPageComponent implements OnInit,OnDestroy{
     });
   }
 
+  //***Lifecycle Hook: Component closing operations.***
   ngOnDestroy():void{
      this.subscriptions.unsubscribe(); //Unsubscribe from all subscriptions to avoid memory leaks.
      console.log('MAIN-Reset2B:',this.appCom.products$);
@@ -80,24 +94,7 @@ export class MainPageComponent implements OnInit,OnDestroy{
      console.log('MAIN-Reset2A:',this.appCom.products$);
   }
 
-  //Method to open one modal element.
-  openModal(product:Product){
-    this.selectedProduct=product;
-    const modal=document.getElementById("someModalId");
-    if(modal){
-      modal.style.display="block";
-    }
-  }
-   
-  //Method to grab all database entries.Not ideal. NOT USED CURRENTLY. 
-  private getAllProducts(){
-    this.injectibleService.GetAllProductsFromDb().subscribe(data=>{
-      this.products=[...data]; //Collect all database entries first.
-      console.log('Products fetched:', this.products);
-      this.getProductImage(); //Then, grab image names from collected entries.
-    });
-  }
-
+  //***Methods used by "Product" tiles.***
   //Method to grab image corresponding to given product name.
   private getProductImage(){
     if(this.products.length==0){console.error("Zero products were retrieved.")}
@@ -113,19 +110,36 @@ export class MainPageComponent implements OnInit,OnDestroy{
     }
   }
 
-  //Method to help express price.
+  //Method to help express price(NOT USED CURRRENTLY).
   convertCentsToDollars(cents:number):string{return (cents/100).toFixed(2);}
 
-  // JavaScript to set the pixel value of 98vw as a CSS variable function 
-  setVwAsPx(){ 
-    const vw=window.innerWidth;
-    const varVwPx=vw*0.98; // Calculate 98vw in pixels
-    const containerElement=document.querySelector('.container') as HTMLElement;
-
-    if(containerElement){containerElement.style.setProperty('--var_vw', `${varVwPx}px`);}
-    console.log("Captured vw in pixels:",varVwPx);
+  //Method to grab all database entries. Not ideal(NOT USED CURRENTLY). 
+  private getAllProducts(){
+    this.injectibleService.GetAllProductsFromDb().subscribe(data=>{
+      this.products=[...data]; //Collect all database entries first.
+      console.log('Products fetched:', this.products);
+      this.getProductImage(); //Then, grab image names from collected entries.
+    });
   }
 
-  /*@HostListener('window:resize',['$event'])
-   onResize(event:any):void{this.setVwAsPx();}*/
+  //***Methods used by modals.***
+  //Renders desired modal content.
+  async openModal(product:Product):Promise<void>{
+    this.selectedProduct=product;
+    const modalId=document.getElementById("someModalId");
+    
+    if(modalId){
+      modalId.style.display="block";
+      if(this.selectedProduct?.description){
+        const rawHtml=this.markdownService.parse(this.selectedProduct.description);
+        this.parsedDescription=this.sanitizer.bypassSecurityTrustHtml(rawHtml);
+      }  
+    }
+  }
+
+  //***Methods used by accordion elements.***
+  //Method to open one accordion element.
+  togglePanel(index:number){
+    this.cordionItems[index].isOpen=!this.cordionItems[index].isOpen;
+  }
 }

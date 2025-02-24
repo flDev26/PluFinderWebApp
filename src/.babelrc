@@ -1,0 +1,11 @@
+{
+    "presets": [
+        ["@babel/preset-env", {
+            "targets": {
+                "safari": "13",
+                "browsers": "> 0.5%, last 2 versions, not dead"
+            }
+        }],
+        "@babel/preset-typescript"
+    ]
+}

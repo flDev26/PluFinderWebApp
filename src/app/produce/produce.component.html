@@ -7,32 +7,139 @@
           <img ngOptimizedImage [src]="product.imageUrl" class="card-img-top" alt="{{product.productName}}">
           <div class="card-body">
             <h5 class="card-title">{{product.productName}}</h5>
-            <p class="card-text">PLU: {{product.plu}}</p>
+            <p class="card-text">PLU: <strong>{{product.plu}}</strong></p>
           </div>
         </div>
       </div>
   </div>
+
   <!--Accordion structure-->
   <div *ngFor="let cordionItem of cordionItems; let i=index">
     <button class="accordion" (click)="togglePanel(i)">{{cordionItem.title}}</button>
     <div class="panel" [ngStyle]="{ 'display': cordionItem.isOpen ? 'block' : 'none' }">
       <p>{{cordionItem.content}}</p>
-    </div>
-  </div>
-  
-  
-  <!--Modal structure for a card(pop-up sub-window)-->
-  <div id="someModalId" class="modal">
-    <div class="modal-content">
-      <span class="close">×</span>
-      <img [src]="selectedProduct?.imageUrl" class="modal-img">
-      <div class="modal-text">
-        <h2>{{selectedProduct?.productName}}</h2>
-        <p>PLU: {{selectedProduct?.plu}}</p>
-        <p>Department: {{selectedProduct?.department}}</p>
-        <p>Price: ${{selectedProduct?convertCentsToDollars(selectedProduct.priceInCents):"N/A"}}{{selectedProduct?.unit}}</p>
-        <p>Category: {{selectedProduct?.category}}</p>
-        <p>Description: {{selectedProduct?.description}}</p>
+      <div *ngIf="i==0">
+        <h5>Fruits</h5>
+        <div class="fruitButtons"
+        (mousedown)="onMouseDown($event)"
+        (mousemove)="onMouseMove($event)"
+        (mouseup)="onMouseUp()"
+        (touchstart)="onTouchStart($event)"
+        (touchmove)="onTouchMove($event)"
+        (touchend)="onTouchEnd()">
+          <button class="btn btn-custom" (click)="selectButton('Apples/Pears')"
+          [ngClass]="{'selected': selectedButton=='button1'}">
+            Apples/Pears
+          </button>
+          <button class="btn btn-custom" (click)="selectButton('Citrus')"
+          [ngClass]="{'selected': selectedButton=='button2'}">
+           Citrus
+          </button>
+          <button class="btn btn-custom" (click)="selectButton('Berries')"
+          [ngClass]="{'selected': selectedButton=='button3'}">
+            Berries
+          </button>
+          <button class="btn btn-custom" (click)="selectButton('Stone Fruits')"
+          [ngClass]="{'selected': selectedButton=='button4'}">
+            Stone Fruits
+          </button>
+          <button class="btn btn-custom" (click)="selectButton('Tropical')"
+          [ngClass]="{'selected': selectedButton=='button5'}">
+            Tropical
+          </button>
+          <button class="btn btn-custom" (click)="selectButton('Melons')"
+          [ngClass]="{'selected': selectedButton=='button6'}">
+            Melons
+          </button>
+          <button class="btn btn-custom" (click)="selectButton('Grapes')"
+          [ngClass]="{'selected': selectedButton=='button7'}">
+            Grapes
+          </button>
+          <button class="btn btn-custom" (click)="selectButton('Prepared')"
+          [ngClass]="{'selected': selectedButton=='button8'}">
+            Prepared
+          </button>
+        </div>
+
+        <h5>Vegetables</h5>
+        <div class="fruitButtons"
+        (mousedown)="onMouseDown($event)"
+        (mousemove)="onMouseMove($event)"
+        (mouseup)="onMouseUp()"
+        (touchstart)="onTouchStart($event)"
+        (touchmove)="onTouchMove($event)"
+        (touchend)="onTouchEnd()">
+          <button class="btn btn-custom" (click)="selectButton('Leafy Greens')"
+          [ngClass]="{'selected': selectedButton=='button9'}">
+            Leafy Greens
+          </button>
+          <button class="btn btn-custom" (click)="selectButton('Cruciferous Veggies')"
+          [ngClass]="{'selected': selectedButton=='button10'}">
+            Cruciferous Veggies
+          </button>
+          <button class="btn btn-custom" (click)="selectButton('Squashes')"
+          [ngClass]="{'selected': selectedButton=='button11'}">
+            Squashes
+          </button>
+          <button class="btn btn-custom" (click)="selectButton('Nightshades')"
+          [ngClass]="{'selected': selectedButton=='button12'}">
+            Nightshades
+          </button>
+          <button class="btn btn-custom" (click)="selectButton('Alliums')"
+          [ngClass]="{'selected': selectedButton=='button13'}">
+            Alliums
+          </button>
+          <button class="btn btn-custom" (click)="selectButton('Roots/Tubers')"
+          [ngClass]="{'selected': selectedButton=='button14'}">
+            Roots/Tubers
+          </button>
+          <button class="btn btn-custom" (click)="selectButton('Legumes')"
+          [ngClass]="{'selected': selectedButton=='button15'}">
+            Legumes
+          </button>
+          <button class="btn btn-custom" (click)="selectButton('Fresh Herbs')"
+          [ngClass]="{'selected': selectedButton=='button16'}">
+            Fresh Herbs
+          </button>
+          <button class="btn btn-custom" (click)="selectButton('Prepared')"
+          [ngClass]="{'selected': selectedButton=='button17'}">
+            Prepared
+          </button>
+          <button class="btn btn-custom" (click)="selectButton('Mushrooms/Other')"
+          [ngClass]="{'selected': selectedButton=='button18'}">
+            Mushrooms/Other
+          </button>
+        </div>
+      </div>
+      <div *ngIf="i==1">
+        <p><strong>BOB</strong> - <em>Bottom of Basket</em></p>
+        <p>Check the bottom of customers' carts to ensure nothing is overlooked during checkout. Use the small mirror in front of you.</p>
+        <ul>
+          <li>Check for small items like canned goods or cleaning products.</li>
+          <li>Don't forget to scan large items like cases of water or bulk packages.</li>
+        </ul>
+
+        <p><strong>LISA</strong> - <em>Look Inside Always</em></p>
+        <p>Reasonably look inside larger items, bags, or containers to ensure nothing is missed or left unscanned.</p>
+        <ul>
+          <li>Baggers can help in this area.</li>
+          <li>When purchasing a tote or trash bin, additional items may be stored inside.</li>
+        </ul>
       </div>
     </div>
   </div>
+  
+<!--Modal structure for a card(pop-up sub-window).-->
+<div id="someModalId" class="modal">
+  <div class="modal-content">
+    <span class="close">×</span>
+    <img [src]="selectedProduct?.imageUrl" class="modal-img">
+    <div class="modal-text">
+      <h2>{{selectedProduct?.productName}}</h2>
+      <p><strong>PLU: </strong><u><strong>{{selectedProduct?.plu}}</strong></u></p>
+      <p><strong>Department: </strong>{{selectedProduct?.department}}</p>
+      <div class="baseline"></div>
+      <div class="description" [innerHTML]="parsedDescription"></div>
+    </div>
+  </div>
+</div>

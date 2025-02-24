@@ -6,11 +6,12 @@
       <img ngOptimizedImage [src]="product.imageUrl" class="card-img-top" alt="{{product.productName}}">
       <div class="card-body">
         <h5 class="card-title">{{product.productName}}</h5>
-        <p class="card-text">PLU: {{product.plu}}</p>
+        <p class="card-text">PLU: <strong>{{product.plu}}</strong></p>
       </div>
     </div>
   </div>
 </div>
+
 <!--Accordion structure-->
 <div *ngFor="let cordionItem of cordionItems; let i=index">
   <button class="accordion" (click)="togglePanel(i)">{{cordionItem.title}}</button>
@@ -20,18 +21,17 @@
 </div>
 
 
-<!--Modal structure for a card(pop-up sub-window)-->
+<!--Modal structure for a card(pop-up sub-window).-->
 <div id="someModalId" class="modal">
   <div class="modal-content">
     <span class="close">×</span>
     <img [src]="selectedProduct?.imageUrl" class="modal-img">
     <div class="modal-text">
       <h2>{{selectedProduct?.productName}}</h2>
-      <p>PLU: {{selectedProduct?.plu}}</p>
-      <p>Department: {{selectedProduct?.department}}</p>
-      <p>Price: ${{selectedProduct?convertCentsToDollars(selectedProduct.priceInCents):"N/A"}}{{selectedProduct?.unit}}</p>
-      <p>Category: {{selectedProduct?.category}}</p>
-      <p>Description: {{selectedProduct?.description}}</p>
+      <p><strong>PLU: </strong><u><strong>{{selectedProduct?.plu}}</strong></u></p>
+      <p><strong>Department: </strong>{{selectedProduct?.department}}</p>
+      <div class="baseline"></div>
+      <div class="description" [innerHTML]="parsedDescription"></div>
     </div>
   </div>
 </div>
