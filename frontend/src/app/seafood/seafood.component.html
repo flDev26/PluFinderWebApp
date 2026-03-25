@@ -1,0 +1,85 @@
+<h3>Seafood</h3>
+<!--Card container structure-->
+<div class="container">
+  <div class="col-md-4" *ngFor="let product of products">
+    <div class="card mb-4" (click)="openModal(product)">
+      <img ngOptimizedImage [src]="product.imageUrl" class="card-img-top" alt="{{product.productName}}">
+      <div class="card-body">
+        <h5 class="card-title">{{product.productName}}</h5>
+        <p class="card-text">PLU: <strong>{{product.plu}}</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Accordion structure-->
+<div *ngFor="let cordionItem of cordionItems; let i=index">
+  <button class="accordion" (click)="togglePanel(i)">{{cordionItem.title}}</button>
+  <div class="panel" [ngStyle]="{ 'display': cordionItem.isOpen ? 'block' : 'none' }">
+    <p>{{cordionItem.content}}</p>
+    <div *ngIf="i==0">
+      <strong>Preparation</strong>
+      <ul>
+        <li>Ensure that the steamer is on and has run one cycle for the day.</li>
+        <li>The steamer self replenishes its own water, so there is no need to pour any in.</li>
+      </ul>
+      <strong>Seasoning the Shrimp</strong>
+      <ul>
+        <li>Place the fresh shrimp directly on the steamer tray. Do not place any other items on the tray; ONLY SHRIMP may be steamed.</li>
+        <li>Season the srimp with an even coat. The customer can choose to go <em>light</em>, <em>medium</em>, or <em>heavy</em> on the seasoning.</li>
+        <li>The following seasonings may be used on the shrimp:</li>
+        <ul>
+          <li>Old Bay Classic</li>
+          <li>Old Bay Lemon Pepper</li>
+          <li>(include option 3...)</li>
+          <li>(include option 4...)</li>
+        </ul>
+      </ul>
+      <strong>Steaming the Shrimp</strong>
+      <ul>
+        <li>Set the steamer to a temperature of 212°F (100°C).</li>
+        <li>Place the steamer tray with the seasoned shrimp into the steamer.</li>
+        <li>Steam the shrimp for approximately 5-7 minutes, or until they turn pink and opaque.</li>
+      </ul>
+      <strong>Temperature Check</strong>
+      <ul>
+        <li>Use a food thermometer to check the internal temperature of the shrimp.</li>
+        <li>The shrimp should reach an internal temperature of 145°F (63°C) to ensure they are fully cooked.</li>
+      </ul>
+      <strong>Serving</strong>
+      <ul>
+        <li>Use provided gloves. Everything inside the steamer is hot and will cause burns.</li>
+        <li>Carefully remove the shrimp from the steamer tray.</li>
+        <li>Transfer them to a seafood bag and wrap them.</li>
+      </ul>
+      <strong>Cleanup</strong>
+      <ul>
+        <li>After the steamer has cooled, disassemble and clean all parts. Turn the steamer off when the day is over.</li>
+      </ul>
+    </div> 
+    <div *ngIf="i==1 && videoUrlVar">
+      <div class="video-container">
+        <video width="400" controls muted>
+          <source [src]="videoUrlVar" type="video/mp4">
+        </video>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Modal structure for a card(pop-up sub-window).-->
+<div id="someModalId" class="modal">
+  <div class="modal-content">
+    <span class="close">×</span>
+    <img [src]="selectedProduct?.imageUrl" class="modal-img">
+    <div class="modal-text">
+      <h2>{{selectedProduct?.productName}}</h2>
+      <p><strong>PLU: </strong><u><strong>{{selectedProduct?.plu}}</strong></u></p>
+      <p><strong>Department: </strong>{{selectedProduct?.department}}</p>
+      <div class="baseline"></div>
+      <div class="description" [innerHTML]="parsedDescription"></div>
+    </div>
+  </div>
+</div>
+
+

@@ -1,0 +1,50 @@
+<div class="chat-container">
+    <div class="messages">
+      <div *ngFor="let message of messages">
+        <p><strong>{{ message.sender }}</strong>: {{ message.content }}</p>
+      </div>
+    </div>
+    <div class="input-container">
+      <input type="text" [(ngModel)]="messageContent" placeholder="Enter your message..." />
+      <button (click)="sendMessage()">Send</button>
+    </div>
+  
+    <!-- New User Modal -->
+    <div *ngIf="showNewUserModal" class="modal">
+      <h2>Register Your Details</h2>
+      <input [(ngModel)]="username" placeholder="Username" />
+      <input [(ngModel)]="store" placeholder="Store" />
+      <input [(ngModel)]="department" placeholder="Department" />
+      <button (click)="register()">Register</button>
+    </div>
+  
+    <!-- Admin Panel Modal -->
+    <div *ngIf="isAdmin" class="modal">
+      <h2>Admin Panel</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>IP Address</th>
+            <th>Store</th>
+            <th>Department</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of pendingUsers">
+            <td>{{ user.username }}</td>
+            <td>{{ user.ip }}</td>
+            <td>{{ user.store }}</td>
+            <td>{{ user.department }}</td>
+            <td>
+              <button (click)="approveUser(user.ip)">Approve</button>
+              <button (click)="declineUser(user.ip)">Decline</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button (click)="logout()">Logout</button>
+    </div>
+  </div>
+  
