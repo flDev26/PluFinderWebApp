@@ -1,3 +1,6 @@
+<!--Background color. All components.-->
+<div class="backdrop"></div>
+
 <!--SMALL SCREENS. Menu Sidebar. Hidden on larger screens.--> 
 <div class="leftSideBar"> 
   <a id="closeButton" class="closebtn" (click)="toggleMenu($event)">X</a>
@@ -28,23 +31,23 @@
   <div class="container-fluid">
     <!--Menu options are hyperlink activated to different components.-->
     <a class="navbar-brand" routerLink="/meat-market-page" routerLinkActive="active">
-      <img src="browser/assets/NavigationImages/steak.png" alt="" width="50" height="50" class="d-inline-block align-text-center">
+      <img src="/assets/NavigationImages/steak.png" alt="" width="50" height="50" class="d-inline-block align-text-center">
       MeatMarket
     </a>
     <a class="navbar-brand" routerLink="/seafood-page" routerLinkActive="active">
-      <img src="browser/assets/NavigationImages/trout.png" alt="" width="50" height="50" class="d-inline-block align-text-center">
+      <img src="/assets/NavigationImages/trout.png" alt="" width="50" height="50" class="d-inline-block align-text-center">
       Seafood
     </a>
     <a class="navbar-brand" routerLink="/deli-page" routerLinkActive="active">
-      <img src="browser/assets/NavigationImages/sandwitch.png" alt="" width="50" height="50" class="d-inline-block align-text-center">
+      <img src="/assets/NavigationImages/charcuterie.png" alt="" width="50" height="50" class="d-inline-block align-text-center">
       Deli
     </a>
     <a class="navbar-brand" routerLink="/bakery-page" routerLinkActive="active">
-      <img src="browser/assets/NavigationImages/cupcake.png" alt="" width="50" height="50" class="d-inline-block align-text-center">
+      <img src="/assets/NavigationImages/cupcake.png" alt="" width="50" height="50" class="d-inline-block align-text-center">
       Bakery
     </a>
     <a class="navbar-brand" routerLink="/produce-page" routerLinkActive="active">
-      <img src="browser/assets/NavigationImages/cornucopia.png" alt="" width="50" height="50" class="d-inline-block align-text-center">
+      <img src="/assets/NavigationImages/cornucopia.png" alt="" width="50" height="50" class="d-inline-block align-text-center">
       Produce
     </a>
     <form id="bigScreenSearch" [formGroup]="searchForm" class="d-flex" (ngSubmit)="onSearchSubmit()">

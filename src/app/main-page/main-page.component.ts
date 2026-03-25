@@ -81,7 +81,9 @@ export class MainPageComponent implements OnInit,OnDestroy{
     //Close modal on outside click.
     window.addEventListener('click',(event)=>{
       if(event.target==modalId){
-        if(modalId){modalId.style.display="none";}
+        if(modalId){
+          modalId.style.display="none";
+        }
       }
     });
   }
@@ -127,6 +129,7 @@ export class MainPageComponent implements OnInit,OnDestroy{
   async openModal(product:Product):Promise<void>{
     this.selectedProduct=product;
     const modalId=document.getElementById("someModalId");
+
     
     if(modalId){
       modalId.style.display="block";

@@ -15,14 +15,14 @@ export class AppInjectibleService {
 
   //Variables holding Urls from the back end services.
   //***FOR TESTING LOCALLY****
-  //private hostURL="http://localhost:8080/api/v1/products_indatabase";
-  //private imagesURL="http://localhost:8080/api/v1/images";
-  //private videosURL="http://localhost:8080/api/v1/videos";
+  private hostURL="http://localhost:8080/api/v1/products_indatabase";
+  private imagesURL="http://localhost:8080/api/v1/images";
+  private videosURL="http://localhost:8080/api/v1/videos";
 
   //***AWS EC2 INSTANCE***
-  private hostURL="http://ec2-3-129-194-7.us-east-2.compute.amazonaws.com:8080/api/v1/products_indatabase";
-  private imagesURL="http://ec2-3-129-194-7.us-east-2.compute.amazonaws.com:8080/api/v1/images";
-  private videosURL="http://ec2-3-129-194-7.us-east-2.compute.amazonaws.com:8080/api/v1/videos";
+  //private hostURL="http://ec2-3-129-194-7.us-east-2.compute.amazonaws.com:8080/api/v1/products_indatabase";
+  //private imagesURL="http://ec2-3-129-194-7.us-east-2.compute.amazonaws.com:8080/api/v1/images";
+  //private videosURL="http://ec2-3-129-194-7.us-east-2.compute.amazonaws.com:8080/api/v1/videos";
 
   //The "Observable" class helps create/recieve requests from the frontend side of the application.
   //The API requests used in this project are "POST", "GET", "PUT", and "DELETE". 

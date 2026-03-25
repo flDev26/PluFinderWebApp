@@ -10,12 +10,25 @@
   border:solid red;
 }*/
 
+/***App backdrop color.***/
+.backdrop{
+  position:fixed;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  background-color: navajowhite;
+  z-index:1;
+}
+
 /***"PLU Finder" link. App title and home button.***/
 .appTitle{ /*BigAndSmallScreens*/
   display:flex;
   justify-content:center;
   flex-direction:column;
+  position:relative;
   background-color:rgb(40, 119, 199);
+  z-index:2;
 }
 .appTitle .custom-link{ /*BigAndSmallScreens*/
   color: white;
@@ -24,6 +37,7 @@
   vertical-align:middle;
   white-space:nowrap;
   text-decoration:none;
+  z-index:2;
 }
 .appTitle .mobileNav-toggler{ /*SmallScreen*/
   position:absolute;
@@ -55,6 +69,7 @@
   height:100%;
   background-color:rgb(40, 119, 199);
   color:#ffffff; 
+  z-index:2;
 }
 .navbar .navbar-brand{
   color: #ffffff;
@@ -92,8 +107,10 @@
   display:flex;
   justify-content:center;
   text-align:center;
+  position:relative;
   background-color:rgb(40, 119, 199);
   color: #ffffff;
+  z-index:2;
 }
 @media(max-width:600px){
   .global-footer{display:none;}
@@ -115,7 +132,7 @@
   width:250px; /*Expand width*/ 
   opacity:1; /*Sidebar now fully visible*/
   pointer-events:auto; /*Accept clicks*/
-  z-index: 99; /*Ensure menu bar is above all other content on screen.*/
+  z-index:3; /*Ensure menu bar is above all other content on screen.*/
 } 
 .leftSideBar.open a{ /*...Open*/
   padding:8px 8px 8px 32px;
@@ -141,11 +158,11 @@
   position:fixed; /*Positioning absolutely within parent*/
   bottom:0; /*Align to the bottom*/
   border-top:1px solid hsl(210, 11%, 29%);
-  opacity: 0; /*Start hidden*/
+  opacity:0; /*Start hidden*/
   transition: opacity 1s ease-in-out; /*Transition effect*/
  }
  .leftSideBar.open span {
-  opacity: 1; /*Fade in when sidebar is open*/
+  opacity:1; /*Fade in when sidebar is open*/
 }
 
 /***Hide the sidebar and mobile button on larger screens.***/
