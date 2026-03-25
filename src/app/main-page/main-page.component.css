@@ -1,0 +1,182 @@
+/***Component title***/
+h3{
+  margin-top:-25px;
+  margin-bottom:-5px;
+  position: relative;
+  z-index:2;
+}
+
+/***Box/Container that holds all card elements.***/
+.container{
+  width:98vw;
+  height:86vh; /*86% of the viewport height*/
+  border:1px solid hsl(210,11%,29%);
+  overflow-y:auto; /*Enable vertical scrolling*/
+  display:flex;
+  flex-wrap:wrap; /*Allow wrapping of items*/ 
+  align-content:flex-start; /*Align wrapped rows to the start*/ 
+  gap:1%; /*Adjust gap between cards*/ 
+  padding:1%; /*Adjust padding for container edge spacing*/
+  position:relative;
+  background-color:white;
+  z-index:2;
+}
+/***Bootstrap grid system styling. Single card within a row.***/
+.container .col-md-4{
+  max-width:150px; /*Cards don't exceed this width*/
+  max-height:250px; /*Cards won't exeed this length*/
+}
+
+/***Card styling.***/
+.container .col-md-4 .card{
+  width:150px;
+  height:250px;
+  background-color:#f0f0f0;
+  border:1px solid hsl(210,11%,29%);
+  align-items:left;
+}
+.container .col-md-4 .card .card-img-top{
+  max-width:150px;
+  max-height:100px;
+  border:none; /*Remove any border from the card images*/
+}
+.container .col-md-4 .card .card-body .card-title{
+  max-width:150px; /*Set the width of the card title*/
+  height:105px;
+  display:-webkit-box;
+  -webkit-line-clamp:5; /*Limit to 5 lines*/
+  -webkit-box-orient:vertical;
+  /* max-height: 3em; /* Fallback for non-WebKit browsers
+  line-height: 1.5em;  Adjust line height to match the number of lines  */
+  white-space:normal; /*Allow text wraping*/
+  overflow:hidden; /*Hide any overflow text*/
+  text-overflow:ellipsis; /*Add "..." to indicate truncated text*/
+}
+.container .col-md-4 .card .card-body .card-text{
+  width:100%;
+  height:45px;
+}
+/***Info paragraphs. Small screens.***/
+@media(max-width:600px){ 
+  .container{justify-content:space-evenly;}/*Left-align items*/
+  .infoSection{display:none;}
+  .accordion{display:block;}
+
+}
+@media(min-width:601px){
+  .container{justify-content:center;}
+  .infoSection{
+    display:block;
+    position:relative;
+    z-index:2;
+  }
+  .accordion{display:none;}
+}
+
+/***Modal container styling.***/
+.modal{
+  display:none;
+  position:fixed;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  background-color:rgb(0,0,0,0.8);
+  z-index:4;
+}
+/***Modal content styling.***/
+.modal-content{
+  background-color:#fefefe;
+  margin:15% auto;
+  padding:20px;
+  border:1px solid black;
+  width:75%; 
+  max-height:80vh; 
+  display:flex; 
+  flex-direction:row;
+  align-items:flex-start;
+}
+.modal-content .modal-img{
+  width:60%; /*Set image width*/
+  height:auto; /*Set image height*/
+  max-height:70vh;
+  margin-right:20px; /*Space between image and content*/
+}
+.modal-content .modal-text{
+  flex:1; /*Allow text content to take up remaining space*/
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start; /*Align text at the top*/
+  align-items:flex-start; /*Align text to the left*/
+  max-height:calc(80vh - 40px); /*Child length cannot be more than parent length*/
+  overflow-y:auto;
+}
+.modal-content .modal-text .baseline {
+  width:100%; /*Stretch to full width of the container*/
+  border-bottom:2px solid #000; /*Thickness, style, and color*/
+  margin:10px 0; /*Spacing above and below the line*/
+}
+/***Modal layout for smaller screens.***/ 
+@media(max-width:600px){
+  .modal-content{
+    flex-direction:column; 
+    align-items:center; 
+    margin:10% auto; 
+    width:90%; 
+  } 
+  .modal-content .modal-img{ 
+    width:100%; 
+    height:250px; 
+    margin-bottom:20px; 
+  }
+  .modal-content .modal-text{ 
+    width:100%;
+    max-height:none;
+    overflow-y:auto;
+  }
+}
+
+/***Modal close button styling.***/
+.close{
+  color:#aaa;
+  float:right;
+  font-size:28px;
+  font-weight:bold;
+}
+.close:hover,
+.close:focus{
+  color:black;
+  text-decoration:none;
+  cursor:pointer;
+}
+
+/***Accordion styling.***/
+.accordion{
+  background-color:#eee;
+  color:#444;
+  cursor:pointer; /*Change coursor to a pointer when hovering*/
+  padding:18px;
+  width:100%;
+  border:none;
+  text-align:left;
+  outline:none;
+  position:relative;
+  font-size:15px;
+  transition:0.4s; /*Transition effect for background color*/
+  z-index:2;
+}
+
+/***Active accordion link hover styling.***/
+.active, .accordion:hover{
+  background-color:#ccc;
+}
+
+/***Clicked accordion panel/element styling.***/
+.panel{
+  padding:0 18px;
+  background-color:white;
+  position:relative;
+  box-sizing:border-box;
+  z-index:2;
+  /* border:2px solid green; */
+}

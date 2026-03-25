@@ -1,0 +1,68 @@
+<!--Background color. All components.-->
+<div class="backdrop"></div>
+
+<!--SMALL SCREENS. Menu Sidebar. Hidden on larger screens.--> 
+<div class="leftSideBar"> 
+  <a id="closeButton" class="closebtn" (click)="toggleMenu($event)">X</a>
+  <a class="navbar-brand" routerLink="/meat-market-page" routerLinkActive="active">MeatMarket</a>
+  <a class="navbar-brand" routerLink="/seafood-page" routerLinkActive="active">Seafood</a>
+  <a class="navbar-brand" routerLink="/deli-page" routerLinkActive="active">Deli</a>
+  <a class="navbar-brand" routerLink="/bakery-page" routerLinkActive="active">Bakery</a>
+  <a class="navbar-brand" routerLink="/produce-page" routerLinkActive="active">Produce</a>
+  <span>Available for public use without restrictions. - FCPT - 2024</span>
+</div>
+
+<!--App name banner.-->
+<h2 class="appTitle">
+  <!--SNIPPET HERE IS FOR SMALL SCREENS. Upper left menu button.-->
+  <button id="mainMobileMenu" class="mobileNav-toggler" (click)="toggleMenu($event)">☰</button>
+  <a routerLink="/mainPage" class="custom-link">{{appVar_title}}</a>
+  <div class="smallScreenSearch">
+    <form class="d-flex" [formGroup]="searchForm" (ngSubmit)="onSearchSubmit()">
+      <input class="form-control me-2" formControlName="searchTerm" type="text" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+  </div>
+</h2>
+
+<!--BIG SCREENS. Header navigation bar. Hidden on smaller screens.-->
+<nav class="navbar">
+  <!--Container to hold all buttons.-->
+  <div class="container-fluid">
+    <!--Menu options are hyperlink activated to different components.-->
+    <a class="navbar-brand" routerLink="/meat-market-page" routerLinkActive="active">
+      <img src="/assets/NavigationImages/steak.png" alt="" width="50" height="50" class="d-inline-block align-text-center">
+      MeatMarket
+    </a>
+    <a class="navbar-brand" routerLink="/seafood-page" routerLinkActive="active">
+      <img src="/assets/NavigationImages/trout.png" alt="" width="50" height="50" class="d-inline-block align-text-center">
+      Seafood
+    </a>
+    <a class="navbar-brand" routerLink="/deli-page" routerLinkActive="active">
+      <img src="/assets/NavigationImages/charcuterie.png" alt="" width="50" height="50" class="d-inline-block align-text-center">
+      Deli
+    </a>
+    <a class="navbar-brand" routerLink="/bakery-page" routerLinkActive="active">
+      <img src="/assets/NavigationImages/cupcake.png" alt="" width="50" height="50" class="d-inline-block align-text-center">
+      Bakery
+    </a>
+    <a class="navbar-brand" routerLink="/produce-page" routerLinkActive="active">
+      <img src="/assets/NavigationImages/cornucopia.png" alt="" width="50" height="50" class="d-inline-block align-text-center">
+      Produce
+    </a>
+    <form id="bigScreenSearch" [formGroup]="searchForm" class="d-flex" (ngSubmit)="onSearchSubmit()">
+      <input class="form-control me-2" formControlName="searchTerm" type="text" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+
+<!--Dynamic container. Loads in different page content.-->
+<router-outlet></router-outlet>
+
+<!--Footer banner.-->
+<footer class="global-footer">
+  <div class="container">
+    <span>Available for public use without restrictions. - FCPT - 2024</span>
+  </div>
+</footer>
