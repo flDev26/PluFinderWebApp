@@ -3,7 +3,9 @@
 <div class="container">
   <div class="col-md-4" *ngFor="let product of products">
     <div class="card mb-4" (click)="openModal(product)">
-      <img ngOptimizedImage [src]="product.imageUrl" class="card-img-top" alt="{{product.productName}}">
+      <!-- Old local version of fetching media asset...
+      <img ngOptimizedImage [src]="product.imageUrl" class="card-img-top" alt="{{product.productName}}">-->
+      <img [src]="s3ImagePath+'/'+product.imageFileName" class="card-img-top"  alt="{{product.productName}}">
       <div class="card-body">
         <h5 class="card-title">{{product.productName}}</h5>
         <p class="card-text">PLU: <strong>{{product.plu}}</strong></p>
@@ -108,7 +110,7 @@
     <div *ngIf="i==1" class="cowMapImgWrapper">
       <div class="imageContainer"> 
         <div class="zoomable">
-          <img src="browser/assets/AccordionImages/beefCutsGraphic.jpg" usemap="#image-map">
+          <img src="/assets/AccordionImages/beefCutsGraphic.jpg" usemap="#image-map">
           <svg class="areaOverlay">
             <!--Polygons declared to overlay on top of desired areas.--> 
             <polygon points="282,271,322,270,353,268,372,267,387,266,397,266,396,222,395,194,393,158,391,129,389,109,387,81,369,78,347,73,330,68,307,60,288,54,270,48,249,41,234,37,227,38,221,46,216,58,214,68,214,86,214,108,216,126,220,158,226,188,233,220,240,245,246,267,251,273,264,272" fill="none" stroke="none" data-area="Chuck" (click)="onAreaClick('chuck')"></polygon>
@@ -131,7 +133,7 @@
     <div *ngIf="i==2" class="pigMapImgWrapper">
       <div class="imageContainer">
         <div class="zoomable">
-          <img src="browser/assets/AccordionImages/porkCutsGraphic.jpg" usemap="#image-map">
+          <img src="/assets/AccordionImages/porkCutsGraphic.jpg" usemap="#image-map">
           <svg class="areaOverlay">
             <polygon points="289,57,246,47,220,50,194,56,169,69,120,95,94,114,65,124,39,131,6,133,2,178,34,195,64,212,106,234,149,251,187,264,217,272,235,264,247,234,264,157" fill="none" stroke="none" data-area="Head" (click)="onAreaClick('head')"></polygon>
             <polygon points="291,57,283,83,272,127,265,157,257,189,294,196,337,200,376,204,389,152,397,114,408,92,417,72,425,59,371,62,332,62" fill="none" stroke="none" data-area="Blade Shoulder" (click)="onAreaClick('blade shoulder')"></polygon>
@@ -152,7 +154,9 @@
 <div id="someModalId" class="modal">
   <div class="modal-content">
     <span class="close">×</span>
-    <img [src]="selectedProduct?.imageUrl" class="modal-img">
+    <!-- Old local version of fetching media asset...
+    <img [src]="selectedProduct?.imageUrl" class="modal-img"> -->
+    <img [src]="s3ImagePath + '/' + selectedProduct?.imageFileName"  class="modal-img">    
     <div class="modal-text">
       <h2>{{selectedProduct?.productName}}</h2>
       <p><strong>PLU: </strong><u><strong>{{selectedProduct?.plu}}</strong></u></p>

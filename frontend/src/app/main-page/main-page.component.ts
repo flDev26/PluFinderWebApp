@@ -35,7 +35,8 @@ export class MainPageComponent implements OnInit,OnDestroy{
   products:Product[]=[]; //Captures changes from "products$"
   selectedProduct:Product|null=null; //Helps open modals. !!FIX THE DATA TYPING HERE FOR MODALS!! 
   private dept:string="";
-  parsedDescription:SafeHtml=""; //Stores resulting transfomred html. 
+  parsedDescription: SafeHtml = ""; //Stores resulting transfomred html. 
+  public s3ImagePath: string = this.injectibleService.s3ImagesPath; //Images URL path.
 
   //***Accordion content definition.***
   cordionItems=[
@@ -58,7 +59,10 @@ export class MainPageComponent implements OnInit,OnDestroy{
           console.log('MAIN-Products array is empty.');
         }else{console.log('MAIN-Products loaded(obs):',this.appCom.products$);}
         
-        this.getProductImage();
+        //Old way to fetch image...
+        //this.getProductImage();
+        //New way is done by using the direct connection to the S3 bucket.
+
       })
     );
 

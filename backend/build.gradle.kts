@@ -19,15 +19,19 @@ repositories {
 }
 
 dependencies {
+    //Basic backend and databse dependencies
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("com.mysql:mysql-connector-j")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.10.3")
-    //Aws Dependencies
+    //AWS dependencies
     implementation("io.awspring.cloud:spring-cloud-aws-starter:3.0.0")
     implementation("software.amazon.awssdk:aws-core:2.30.6")
+    //Websocket dependencies
+    implementation("org.springframework.boot:spring-boot-starter-websocket")
+    implementation("org.springframework:spring-websocket:6.1.6") // Add this explicitly
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {

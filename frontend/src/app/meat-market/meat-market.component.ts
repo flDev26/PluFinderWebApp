@@ -37,7 +37,9 @@ export class MeatMarketComponent implements OnInit,OnDestroy,AfterViewInit{
   products:Product[]=[]; //Captures changes from "products$"
   selectedProduct:Product|null=null; //Helps open modals. !!FIX THE DATA TYPING HERE FOR MODALS!! 
   private dept:string="Market";
-  parsedDescription:SafeHtml=""; //Stores resulting transfomred html. 
+  parsedDescription: SafeHtml = ""; //Stores resulting transfomred html. 
+  public s3ImagePath: string = this.injectibleService.s3ImagesPath; //Images URL path.
+
  
   //Variables for accordion buttons within "i==0".
   selectedButton: string | null = null; //Stores button names
@@ -75,7 +77,9 @@ export class MeatMarketComponent implements OnInit,OnDestroy,AfterViewInit{
           console.log('MTMKT-Products array is empty.');
         }else{console.log('MTMKT-Products loaded(obs):',this.appCom.products$);}
         
-        this.getProductImage();
+        //Old way to fetch image...
+        //this.getProductImage();
+        //New way is done by using the direct connection to the S3 bucket.
       })
     );
 

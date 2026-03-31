@@ -4,7 +4,9 @@
 <div class="container">
   <div class="col-md-4" *ngFor="let product of products">
     <div class="card mb-4" (click)="openModal(product)">
-      <img ngOptimizedImage [src]="product.imageUrl" class="card-img-top" alt="{{product.productName}}">
+      <!-- Old local version of fetching media asset...
+      <img ngOptimizedImage [src]="product.imageUrl" class="card-img-top" alt="{{product.productName}}">-->
+      <img [src]="s3ImagePath+'/'+product.imageFileName" class="card-img-top"  alt="{{product.productName}}">
       <div class="card-body">
         <h5 class="card-title">{{product.productName}}</h5>
         <p class="card-text">PLU: <strong>{{product.plu}}</strong></p>
@@ -117,7 +119,9 @@
 <div id="someModalId" class="modal">
   <div class="modal-content">
     <span class="close">×</span>
-    <img [src]="selectedProduct?.imageUrl" class="modal-img">
+    <!-- Old local version of fetching media asset...
+    <img [src]="selectedProduct?.imageUrl" class="modal-img"> -->
+    <img [src]="s3ImagePath + '/' + selectedProduct?.imageFileName"  class="modal-img">
     <div class="modal-text">
       <h2>{{selectedProduct?.productName}}</h2>
       <p><strong>PLU: </strong><u><strong>{{selectedProduct?.plu}}</strong></u></p>

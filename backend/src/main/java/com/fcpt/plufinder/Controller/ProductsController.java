@@ -28,16 +28,19 @@ import com.fcpt.plufinder.Model.Product;
 // front-end made a request to a domain different to the one it stands on. The annotation
 // here fixes this discrepancy.
 //****TESTING LOCALLY****
-@CrossOrigin(origins = "http://localhost:4200")
+// @CrossOrigin(origins = "http://localhost:4200")
 
 //****AWS INSTANCE****
 //@CrossOrigin(origins = "http://plufinder-s3.s3-website.us-east-2.amazonaws.com")
+
+// ****AWS Amplify Instance****
+@CrossOrigin(origins = "https://staging.darqpq57mmzlq.amplifyapp.com")
 
 // RESTful API controller properties are defined here. CRUD(Create,Read,Update,Delete)
 // operations are the 4 motions used to handle a database. These 4 operations are
 // possible with the HTTP methods: POST, GET, PUT, and DELETE. 
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1")
 public class ProductsController{
     @Autowired
     private AutoRepoLogic jpaAutoQuery;
